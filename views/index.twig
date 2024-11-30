@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Available Books</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1 id="availableBooksCount">Available Books: 0</h1>
+  <button id="getBooksButton">Get Available Books</button>
+
+  <script>
+    const socket = io();
+
+    document.getElementById('getBooksButton').addEventListener('click', () => {
+      socket.emit('getAvailableBooks');
+    });
+
+    socket.on('availableBooksCount', (count) => {
+      document.getElementById('availableBooksCount').innerText = `Available Books: ${count}`;
+    });
+  </script>
+</body>
+</html>

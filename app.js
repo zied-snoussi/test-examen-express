@@ -5,7 +5,6 @@ const http = require('http');
 const socketIo = require('socket.io');
 const bookRoutes = require('./routes/book');
 const { Book } = require('./models/Book');
-const twig = require('twig');
 
 const app = express();
 const server = http.createServer(app);

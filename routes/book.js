@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const Book = require('../models/Book');
+const { Book, bookValidationSchema } = require('../models/Book');
 
 // Route to add a book
 router.post('/add', async (req, res) => {
   try {
+    await bookValidationSchema.validate(req.body);
     const { title, author, genre, price, available } = req.body;
     const newBook = new Book({ title, author, genre, price, available });
     await newBook.save();
@@ -37,6 +38,7 @@ router.delete('/delete/:id', async (req, res) => {
 // Route to update a book
 router.put('/edit/:id', async (req, res) => {
   try {
+    await bookValidationSchema.validate(req.body);
     const { title, author, genre, price, available } = req.body;
     const updatedBook = await Book.findByIdAndUpdate(req.params.id, { title, author, genre, price, available }, { new: true });
     res.status(200).json({ message: 'Book updated successfully', book: updatedBook });

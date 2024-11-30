@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const yup = require('yup');
 
 const bookSchema = new mongoose.Schema({
   title: String,
@@ -10,4 +11,12 @@ const bookSchema = new mongoose.Schema({
 
 const Book = mongoose.model('Book', bookSchema);
 
-module.exports = Book;
+const bookValidationSchema = yup.object().shape({
+  title: yup.string().required(),
+  author: yup.string().required(),
+  genre: yup.string().required(),
+  price: yup.number().required().positive(),
+  available: yup.boolean().required()
+});
+
+module.exports = { Book, bookValidationSchema };

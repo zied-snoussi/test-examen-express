@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
 const bookRoutes = require('./routes/book');
-const Book = require('./models/Book');
+const { Book } = require('./models/Book');
 const twig = require('twig');
 
 const app = express();
@@ -29,8 +29,12 @@ app.set('views', './views');
 io.on('connection', (socket) => {
   console.log('New client connected');
   socket.on('getAvailableBooks', async () => {
-    const availableBooksCount = await Book.countDocuments({ available: true });
-    socket.emit('availableBooksCount', availableBooksCount);
+    try {
+      const availableBooksCount = await Book.countDocuments({ available: true });
+      socket.emit('availableBooksCount', availableBooksCount);
+    } catch (error) {
+      console.error('Error fetching available books count', error);
+    }
   });
   socket.on('disconnect', () => {
     console.log('Client disconnected');
